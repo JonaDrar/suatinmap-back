@@ -1,99 +1,165 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# SustainMap - Back
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+![NestJS](https://img.shields.io/badge/NestJS-v9.0.0-red?logo=nestjs)
+![Node.js](https://img.shields.io/badge/Node.js-v20.0.0-green?logo=node.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-v5.1.6-blue?logo=typescript)
+![Firebase](https://img.shields.io/badge/Firebase-v11.0.0-orange?logo=firebase)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## **Resumen del Proyecto**
 
-## Project setup
+![udd40](https://bootcampvirtual.udd.cl/assets/img/logo4.png)
+![matteroftrust](https://matteroftrust.org/wp-content/uploads/2019/01/mot_website_logo_small.png)
 
-```bash
-$ npm install
-```
+Este proyecto es la API backend de **SustainMap**, diseñada para proporcionar servicios RESTful eficientes y seguros. Está construida con **NestJS**, utilizando **TypeScript** para mantener un código modular y escalable, con soporte para autenticación y almacenamiento en tiempo real mediante **Firebase**.
 
-## Compile and run the project
 
-```bash
-# development
-$ npm run start
+### Funcionalidades principales:
+1. API RESTful para gestionar datos del mapa interactivo.
+2. Autenticación de usuarios con **Firebase Authentication**.
+3. Integración con bases de datos y almacenamiento en la nube.
+4. Arquitectura modular y altamente extensible.
 
-# watch mode
-$ npm run start:dev
+### Objetivo:
+Proveer un backend robusto y escalable que soporte el frontend de **SustainMap**, manteniendo buenas prácticas de desarrollo y rendimiento.
 
-# production mode
-$ npm run start:prod
-```
+---
+## **Requisitos Previos**
 
-## Run tests
+Antes de empezar, asegúrate de tener instaladas las siguientes herramientas:
+- Node.js (versión recomendada: >=20.x)
+- Firebase CLI
 
-```bash
-# unit tests
-$ npm run test
+## **Instalación y Ejecución**
 
-# e2e tests
-$ npm run test:e2e
+1. Clona este repositorio:
+   ```bash
+   git clone https://github.com/JonaDrar/suatinmap-back.git
+   ```
 
-# test coverage
-$ npm run test:cov
-```
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
 
-## Deployment
+3. Configura las variables de entorno:
+   - Crea un archivo `.env` en la raíz del proyecto con las siguientes claves:
+     ```
+      PORDEFINIR en el próximo sprint
+     ```
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+4. Ejecuta el servidor de desarrollo:
+   ```bash
+   npm run start:dev
+   ```
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+5. La API estará disponible en [http://localhost:3000](http://localhost:3000).
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+---
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## **Reglas de Commits**
 
-## Resources
+### Estructura del Mensaje de Commit
+- Usa el formato: `tipo: descripción breve`
+- Ejemplo: `feat: agregar autenticación con Firebase`
 
-Check out a few resources that may come in handy when working with NestJS:
+### Tipos de Commits
+- **feat**: Para nuevas funcionalidades.
+- **fix**: Para corregir errores.
+- **docs**: Para cambios en la documentación.
+- **style**: Cambios que no afectan la lógica (formato, espacios, etc.).
+- **refactor**: Cambios de código que no corrigen errores ni añaden funcionalidades.
+- **test**: Añadir o modificar pruebas.
+- **chore**: Cambios en herramientas, configuración, o mantenimiento del proyecto.
+- **perf**: Mejoras de rendimiento.
+- **ci**: Cambios en integración continua.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Reglas Adicionales
+- Commits pequeños y específicos.
+- Usa el idioma inglés o español de manera consistente.
+- Referencia tickets o tareas si aplica (e.g., `feat: agregar endpoint para usuarios (#123)`).
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
+## **Reglas de Merge Requests (MR)**
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Creación de MR
+- Usa un título claro y descriptivo (e.g., `Agregar soporte para base de datos relacional`).
+- Rellena la plantilla estándar del proyecto para detallar:
+  - **Qué se ha hecho.**
+  - **Por qué se ha hecho.**
+  - **Cómo probarlo.**
 
-## License
+### Revisión de MR
+- Al menos un miembro del equipo debe aprobar la MR antes de hacer merge.
+- Comprueba:
+  - Código limpio y sin errores.
+  - Uso correcto de Tipos en TypeScript.
+  - No se suban secretos o configuraciones locales.
+  - Documentación actualizada si aplica.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### Reglas para Hacer Merge
+- Solo el autor del commit puede hacer merge.
+
+### Estado del Proyecto
+- La rama `main` debe estar siempre lista para producción.
+- La rama `develop` contendrá los cambios aprobados para pruebas internas.
+
+---
+
+
+## **Uso de Ramas**
+
+### Estructura de Ramas
+- Usa el formato: `<tipo>/<descripción>`
+- Tipos de ramas:
+  - **feature**: Para nuevas funcionalidades.  
+    Ejemplo: `feature/autenticacion-firebase`
+  - **bugfix**: Para corregir errores.  
+    Ejemplo: `bugfix/arreglo-validacion-datos`
+  - **hotfix**: Cambios urgentes en producción.  
+    Ejemplo: `hotfix/corregir-bug-login`
+  - **chore**: Mantenimiento o tareas menores.  
+    Ejemplo: `chore/actualizar-dependencias`
+
+### Flujo de Trabajo
+- La rama base para las ramas nuevas es `develop`.
+- Una vez completada, haz un Merge Request hacia `develop`.
+
+### Ramas Principales
+- **main**: Versión lista para producción.  
+  - Solo recibe merges desde `develop`.
+- **develop**: Rama de desarrollo principal.  
+  - Recibe merges desde ramas de tipo `feature`, `bugfix`, y `hotfix`.
+
+### Reglas Adicionales
+- Realiza un pull de `develop` antes de crear nuevas ramas.
+- Mantén tus ramas sincronizadas con `develop` mientras trabajas para evitar conflictos.
+
+---
+
+
+## **Guías Adicionales**
+
+### Estilo de Código
+- Sigue las convenciones de ESLint configuradas en el proyecto.
+- Usa el formato de código automatizado con `Prettier`.
+
+---
+
+
+## **Créditos**
+
+Este proyecto es obra de **LatamCoders**, una célula de desarrollo colaborativa parte de la iniciativa **techXcellerators** de **UDD4.0**, el programa de bootcamps de la **Universidad del Desarrollo de Chile**, en colaboración con **MatterofTrust**.
+
+### Sobre **techXcellerators**:
+**techXcellerators** impulsa la transformación digital a través del desarrollo de talento en áreas tecnológicas clave, ofreciendo oportunidades reales para que estudiantes colaboren con empresas líderes en soluciones innovadoras.
+
+---
+
+
+## **Licencia**
+Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para más detalles.
