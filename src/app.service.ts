@@ -27,7 +27,7 @@ export class AppService {
   // Crear nuevos datos en Firestore
   async createData(data: any): Promise<void> {
     try {
-      const docRef = await addDoc(collection(this.db, 'users'), data);
+      const docRef = await addDoc(collection(this.db, 'User'), data);
       console.log('Usuario creado con el id', docRef.id); 
     } catch (error) {
       console.error('Error creando datos', error);

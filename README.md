@@ -29,3 +29,5 @@ Instalacion de modulo de configuracion con el comando `npm i --save @nestjs/conf
 ### 3. Creacion de endpoints para pruebas con la base de datos:
 
 Se crean los endpoints con los metodos `GET` y `POST` para pruebas de comunicacion con la base de datos 
+
+
