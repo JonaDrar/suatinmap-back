@@ -13,24 +13,51 @@ export class AppService {
   }
 
   // Obtener datos desde Firestore
-  async getData() {
+  async getUsers() {
     try {
       const querySnapshot = await getDocs(collection(this.db, 'users'));
       querySnapshot.forEach((doc) => {
         console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
       });
     } catch (error) {
-      console.error('Error obteniendo datos', error);
+      console.error('Error obteniendo usuarios', error);
     }
   }
 
   // Crear nuevos datos en Firestore
-  async createData(data: any): Promise<void> {
+  async createUser(data: any): Promise<void> {
     try {
       const docRef = await addDoc(collection(this.db, 'User'), data);
       console.log('Usuario creado con el id', docRef.id); 
     } catch (error) {
-      console.error('Error creando datos', error);
+      console.error('Error creando usuario', error);
     }
   }
+
+  async createPoint(data: any): Promise<void> {
+    try {
+      const docRef = await addDoc(collection(this.db, 'MoTPoint'), data);
+      console.log('Punto Creado con exito', docRef.id); 
+    } catch (error) {
+      console.error('Punto no creado', error);
+    }
+  }
+
+  async getPoints() {
+    try {
+      const querySnapshot = await getDocs(collection(this.db, 'MoTPoint'));
+      querySnapshot.forEach((doc) => {
+        console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+      });
+    } catch (error) {
+      console.error('Error obteniendo puntos', error);
+    }
+  }
+
+
+
+
+
+
+
 }
