@@ -15,10 +15,11 @@ export class AppService {
   // Obtener datos desde Firestore
   async getUsers() {
     try {
-      const querySnapshot = await getDocs(collection(this.db, 'users'));
-      querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-      });
+      const querySnapshot = await getDocs(collection(this.db, 'User'));
+      return querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
     } catch (error) {
       console.error('Error obteniendo usuarios', error);
     }
@@ -46,17 +47,16 @@ export class AppService {
   async getPoints() {
     try {
       const querySnapshot = await getDocs(collection(this.db, 'MoTPoint'));
-      querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-      });
+      return querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
     } catch (error) {
       console.error('Error obteniendo puntos', error);
+      throw new Error('No se pudieron obtener los puntos');
     }
   }
-
-
-
-
 
 
 
