@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config'; // Asegúrate de importar ConfigService
 import { firebaseDatabase } from 'src/config/firestore.config'; // Asegúrate de que la configuración esté correcta
-import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, getDocs,query,where } from 'firebase/firestore';
 
 @Injectable()
 export class AppService {
@@ -58,6 +58,55 @@ export class AppService {
     }
   }
 
+  async  getFilteredPoints(filters:any){
+    try {
+        let pointCollection = collection(this.db, 'MoTPoint');
+        let conditions =[];
+        if(filters.name){
+        conditions.push(where('name','==',filters.name));
+        }
+        if(filters.description){
+          conditions.push(where('description','==',filters.description));
+        }
+        if(filters.address){
+          conditions.push(where('address','==',filters.address));
+        }
+        if (filters.services && filters.services.length > 0) {
+          conditions.push(where('services', 'array-contains-any', filters.services));
+        }
+        if(filters.region){
+          conditions.push(where('region','==',filters.region));
+        }
+        if(filters.commune){
+          conditions.push(where('commune','==',filters.commune));
+        }
+        if(filters.latitud){
+          conditions.push(where('latitud','==',filters.latitud));
+        }
+        if(filters.longitud){
+          conditions.push(where('longitud','==',filters.longitud));
+        }
+        if(filters.highlighted){
+          conditions.push(where('highlighted','==',filters.highlighted));
+        }
 
+        
+        const q = query(pointCollection,...conditions);
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.docs.map((doc) => ({id:doc.id,...doc.data(),}));
+
+      } catch (error) {
+      console.error('Error obteniendo puntos filtrados', error);
+      throw new Error('No se pudieron obtener los puntos filtrados');
+    }
+
+
+  }
+
+
+
+
+
+  
 
 }
