@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateUser } from './dtos/create-user.dto';
 import { CreatePoint } from './dtos/create-points.dto';
@@ -32,8 +32,12 @@ export class AppController {
   async getFilteredPoints(@Query() filters: PointQueryDto) {
     console.log(filters)
     return this.appService.getFilteredPoints(filters);
-    
   }
 
+  @Delete('/points/:id')
+  async deletePoint(@Param('id') id: string): Promise<void> {
+    await this.appService.deletePoint(id);
+  }
 
+  
 }

@@ -41,15 +41,15 @@ export class PointQueryDto {
       commune? : string;
   
       @IsOptional()
-  @Transform(({ value }) => {
-    // Si el valor es una cadena, lo convertimos en un array
-    if (typeof value === 'string') {
-      return value.split(',').map(item => item.trim());
-    }
-    // Si ya es un array, lo dejamos como está
-    return value;
-  })
-  services?: string[];
+      @Transform(({ value }) => {
+        // Si el valor es una cadena, lo convertimos en un array
+        if (typeof value === 'string') {
+          return value.split(',').map(item => item.trim());
+        }
+        // Si ya es un array, lo dejamos como está
+        return value;
+      })
+      services?: string[];
   
       @IsOptional()
       @IsString()

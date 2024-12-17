@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config'; // Asegúrate de importar ConfigService
 import { firebaseDatabase } from 'src/config/firestore.config'; // Asegúrate de que la configuración esté correcta
-import { collection, addDoc, getDocs,query,where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, updateDoc, doc } from 'firebase/firestore';
 
 @Injectable()
 export class AppService {
@@ -103,10 +103,14 @@ export class AppService {
 
   }
 
-
-
-
-
-  
-
+  async deletePoint(id: string): Promise<void> {
+    try {
+      const pointDocRef = doc(this.db, 'MoTPoint', id);
+      await updateDoc(pointDocRef, { deleted: true });
+      console.log(`Punto con ID ${id} marcado como eliminado.`);
+    } catch (error) {
+      console.error(`Error al marcar el punto como eliminado: ${error}`);
+      throw new Error('No se pudo marcar el punto como eliminado.');
+    }
+  }
 }
