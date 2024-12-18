@@ -84,7 +84,7 @@ export class AppService {
           conditions.push(where('type','==',filters.type));
         }
 
-        const q = query(pointCollection,...conditions);
+        const q = query(pointCollection,...conditions,where('deleted', '==', false));
         const querySnapshot = await getDocs(q);
         return querySnapshot.docs.map((doc) => {
           const data = doc.data();
@@ -103,7 +103,9 @@ export class AppService {
 
   async getPoints() {
     try {
-      const querySnapshot = await getDocs(collection(this.db, 'MoTPoint'));
+      const pointCollection = collection(this.db, 'MoTPoint');
+      const q = query(pointCollection,where('deleted', '==', false));
+      const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map((doc) => {
         const data = doc.data();
         delete data.deleted;
