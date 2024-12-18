@@ -16,10 +16,15 @@ export class AppService {
   async getUsers() {
     try {
       const querySnapshot = await getDocs(collection(this.db, 'User'));
-      return querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      return querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        delete data.pass;
+        delete data.delete;
+        return {
+          id: doc.id,
+          ...data,
+        };
+      });
     } catch (error) {
       console.error('Error obteniendo usuarios', error);
     }
