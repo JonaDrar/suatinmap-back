@@ -1,5 +1,5 @@
-import { IsOptional, IsString, IsBoolean, IsLatitude, IsLongitude, MaxLength, MinLength} from "class-validator";
-import { Transform } from "class-transformer";
+import { IsOptional, IsString, IsBoolean, IsLatitude, IsLongitude, MaxLength, MinLength, IsInt, Min, Max} from "class-validator";
+import { Transform, Type } from "class-transformer";
 
 export class PointQueryDto {
 
@@ -52,8 +52,11 @@ export class PointQueryDto {
       services?: string[];
   
       @IsOptional()
-      @IsString()
-      type? : string;
+      @Type(() => Number)
+      @IsInt()
+      @Min(1)
+      @Max(4)
+      type? : number;
   
       @IsOptional()
       @IsBoolean()

@@ -80,6 +80,9 @@ export class AppService {
         if(filters.highlighted){
           conditions.push(where('highlighted','==',filters.highlighted));
         }
+        if(filters.type){
+          conditions.push(where('type','==',filters.type));
+        }
 
         const q = query(pointCollection,...conditions);
         const querySnapshot = await getDocs(q);
