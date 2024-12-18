@@ -44,20 +44,6 @@ export class AppService {
     }
   }
 
-  async getPoints() {
-    try {
-      const querySnapshot = await getDocs(collection(this.db, 'MoTPoint'));
-      return querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-    } catch (error) {
-      console.error('Error obteniendo puntos', error);
-      throw new Error('No se pudieron obtener los puntos');
-    }
-  }
-
   async  getFilteredPoints(filters:any){
     try {
         let pointCollection = collection(this.db, 'MoTPoint');
@@ -90,7 +76,6 @@ export class AppService {
           conditions.push(where('highlighted','==',filters.highlighted));
         }
 
-        
         const q = query(pointCollection,...conditions);
         const querySnapshot = await getDocs(q);
         return querySnapshot.docs.map((doc) => ({id:doc.id,...doc.data(),}));
@@ -99,8 +84,20 @@ export class AppService {
       console.error('Error obteniendo puntos filtrados', error);
       throw new Error('No se pudieron obtener los puntos filtrados');
     }
+  }
 
+  async getPoints() {
+    try {
+      const querySnapshot = await getDocs(collection(this.db, 'MoTPoint'));
+      return querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
+    } catch (error) {
+      console.error('Error obteniendo puntos', error);
+      throw new Error('No se pudieron obtener los puntos');
+    }
   }
 
   async deletePoint(id: string): Promise<void> {

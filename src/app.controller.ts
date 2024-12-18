@@ -18,20 +18,20 @@ export class AppController {
     await this.appService.createUser(data);
   }
 
-  @Get('/points')
-  getAllPoints() {
-    return this.appService.getPoints();
-  }
-
   @Post('/points')
   async CreatePoint(@Body() data: CreatePoint): Promise<void> {
     await this.appService.createPoint(data);
   }
 
-  @Get('/search')
+  @Get('/points')
   async getFilteredPoints(@Query() filters: PointQueryDto) {
     console.log(filters)
     return this.appService.getFilteredPoints(filters);
+  }
+
+  @Get('/points')
+  getAllPoints() {
+    return this.appService.getPoints();
   }
 
   @Delete('/points/:id')
