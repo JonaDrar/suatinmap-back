@@ -119,6 +119,17 @@ export class AppService {
     }
   }
 
+  async updatePoint(id: string, data: any): Promise<void> {
+    try {
+      const pointDocRef = doc(this.db, 'MoTPoint', id);
+      await updateDoc(pointDocRef, data);
+      console.log(`Punto con ID ${id} actualizado con éxito.`);
+    } catch (error) {
+      console.error('Error actualizando datos', error);
+      throw new Error('No se pudieron actualizar los datos');
+    }
+  }
+
   async deletePoint(id: string): Promise<void> {
     try {
       const pointDocRef = doc(this.db, 'MoTPoint', id);
