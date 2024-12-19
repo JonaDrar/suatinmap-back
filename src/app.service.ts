@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config'; // Asegúrate de importar ConfigService
 import { firebaseDatabase } from 'src/config/firestore.config'; // Asegúrate de que la configuración esté correcta
-import { collection, addDoc, getDocs,query,where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, updateDoc, doc } from 'firebase/firestore';
 
 @Injectable()
 export class AppService {
@@ -16,10 +16,15 @@ export class AppService {
   async getUsers() {
     try {
       const querySnapshot = await getDocs(collection(this.db, 'User'));
-      return querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      return querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        delete data.pass;
+        delete data.delete;
+        return {
+          id: doc.id,
+          ...data,
+        };
+      });
     } catch (error) {
       console.error('Error obteniendo usuarios', error);
     }
@@ -41,20 +46,6 @@ export class AppService {
       console.log('Punto Creado con exito', docRef.id); 
     } catch (error) {
       console.error('Punto no creado', error);
-    }
-  }
-
-  async getPoints() {
-    try {
-      const querySnapshot = await getDocs(collection(this.db, 'MoTPoint'));
-      return querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-    } catch (error) {
-      console.error('Error obteniendo puntos', error);
-      throw new Error('No se pudieron obtener los puntos');
     }
   }
 
@@ -89,24 +80,67 @@ export class AppService {
         if(filters.highlighted){
           conditions.push(where('highlighted','==',filters.highlighted));
         }
+        if(filters.type){
+          conditions.push(where('type','==',filters.type));
+        }
 
-        
-        const q = query(pointCollection,...conditions);
+        const q = query(pointCollection,...conditions,where('deleted', '==', false));
         const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map((doc) => ({id:doc.id,...doc.data(),}));
+        return querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          delete data.deleted;
+          return {
+            id: doc.id,
+            ...data,
+          };
+        });
 
       } catch (error) {
       console.error('Error obteniendo puntos filtrados', error);
       throw new Error('No se pudieron obtener los puntos filtrados');
     }
-
-
   }
 
+  async getPoints() {
+    try {
+      const pointCollection = collection(this.db, 'MoTPoint');
+      const q = query(pointCollection,where('deleted', '==', false));
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        delete data.deleted;
+        return {
+          id: doc.id,
+          ...data,
+        };
+      });
 
+    } catch (error) {
+      console.error('Error obteniendo puntos', error);
+      throw new Error('No se pudieron obtener los puntos');
+    }
+  }
 
+  async updatePoint(id: string, data: any): Promise<void> {
+    try {
+      const pointDocRef = doc(this.db, 'MoTPoint', id);
+      await updateDoc(pointDocRef, data);
+      console.log(`Punto con ID ${id} actualizado con éxito.`);
+    } catch (error) {
+      console.error('Error actualizando datos', error);
+      throw new Error('No se pudieron actualizar los datos');
+    }
+  }
 
-
-  
-
+  async deletePoint(id: string): Promise<void> {
+    try {
+      const pointDocRef = doc(this.db, 'MoTPoint', id);
+      await updateDoc(pointDocRef, { deleted: true });
+      console.log(`Punto con ID ${id} marcado como eliminado.`);
+    } catch (error) {
+      console.error(`Error al marcar el punto como eliminado: ${error}`);
+      throw new Error('No se pudo marcar el punto como eliminado.');
+    }
+  }
 }
+

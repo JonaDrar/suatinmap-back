@@ -1,4 +1,4 @@
-import { ArrayMaxSize, IsArray, IsBoolean, IsLatitude, IsLongitude, isLongitude, IsOptional, IsString, IsUrl, isURL, MaxLength, MinLength } from "class-validator";
+import { ArrayMaxSize, IsArray, IsBoolean, IsInt, IsLatitude, IsLongitude, IsOptional, IsString, IsUrl, Max, MaxLength, Min, MinLength } from "class-validator";
 
 export class CreatePoint {
 
@@ -40,8 +40,10 @@ export class CreatePoint {
     @IsOptional()
     services : string[];
 
-    @IsString()
-    type : string;
+    @IsInt()
+    @Min(1)
+    @Max(4)
+    type : number;
 
     @IsBoolean()
     highlighted : boolean;

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateUser } from './dtos/create-user.dto';
 import { CreatePoint } from './dtos/create-points.dto';
@@ -18,22 +18,31 @@ export class AppController {
     await this.appService.createUser(data);
   }
 
-  @Get('/points')
-  getAllPoints() {
-    return this.appService.getPoints();
-  }
-
   @Post('/points')
   async CreatePoint(@Body() data: CreatePoint): Promise<void> {
     await this.appService.createPoint(data);
   }
 
-  @Get('/search')
+  @Get('/points')
   async getFilteredPoints(@Query() filters: PointQueryDto) {
     console.log(filters)
     return this.appService.getFilteredPoints(filters);
-    
   }
 
+  @Get('/points')
+  getAllPoints() {
+    return this.appService.getPoints();
+  }
 
+  @Put('/points/:id')
+  async updatePoint(@Param('id') id: string, @Body() data: any): Promise<void> {
+    await this.appService.updatePoint(id, data);
+  }
+
+  @Delete('/points/:id')
+  async deletePoint(@Param('id') id: string): Promise<void> {
+    await this.appService.deletePoint(id);
+  }
+
+  
 }
