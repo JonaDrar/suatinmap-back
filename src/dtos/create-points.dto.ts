@@ -1,4 +1,15 @@
-import { ArrayMaxSize, IsArray, IsBoolean, IsInt, IsLatitude, IsLongitude, IsOptional, IsString, IsUrl, Max, MaxLength, Min, MinLength } from "class-validator";
+import { Type } from "class-transformer";
+import { ArrayMaxSize, IsArray, IsBoolean, IsInt, IsLatitude, IsLongitude, IsNumber, IsObject, IsOptional, IsString, IsUrl, Max, MaxLength, Min, MinLength, ValidateNested ,} from "class-validator";
+
+class JsonObjectDTo{
+    @IsString()
+    localName:string;
+    
+    @IsNumber()
+    localNumber:number;
+
+}
+
 
 export class CreatePoint {
 
@@ -47,6 +58,12 @@ export class CreatePoint {
 
     @IsBoolean()
     highlighted : boolean;
+
+    @IsObject()
+    @ValidateNested()
+    @Type(() => JsonObjectDTo)
+    gallery: JsonObjectDTo;
+
 
     @IsBoolean()
     @IsOptional()

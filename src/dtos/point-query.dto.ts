@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsBoolean, IsLatitude, IsLongitude, MaxLength, MinLength, IsInt, Min, Max} from "class-validator";
+import { IsOptional, IsString, IsBoolean, IsLatitude, IsLongitude, MaxLength, MinLength, IsInt, Min, Max, IsNumber} from "class-validator";
 import { Transform, Type } from "class-transformer";
 
 export class PointQueryDto {
@@ -61,4 +61,13 @@ export class PointQueryDto {
       @IsOptional()
       @IsBoolean()
       highlighted? : boolean;
+
+      @IsOptional()
+      @IsString()
+      localName?:string
+
+      @IsOptional()
+      @IsNumber()
+      @Type(() => Number)
+      localNumber?:number
 }

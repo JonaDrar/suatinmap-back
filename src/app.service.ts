@@ -83,6 +83,13 @@ export class AppService {
         if(filters.type){
           conditions.push(where('type','==',filters.type));
         }
+        if(filters.localName){
+          conditions.push(where('gallery.localName','==',filters.localName))
+        }
+        if(filters.localNumber){
+          conditions.push(where('gallery.localNumber','==',filters.localNumber))
+        }
+          
 
         const q = query(pointCollection,...conditions,where('deleted', '==', false));
         const querySnapshot = await getDocs(q);
