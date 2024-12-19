@@ -3,7 +3,7 @@ import { ArrayMaxSize, IsArray, IsBoolean, IsInt, IsLatitude, IsLongitude, IsNum
 
 class JsonObjectDTo{
     @IsString()
-    localName:string;
+    galleryName:string;
     
     @IsNumber()
     localNumber:number;

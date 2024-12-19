@@ -83,8 +83,8 @@ export class AppService {
         if(filters.type){
           conditions.push(where('type','==',filters.type));
         }
-        if(filters.localName){
-          conditions.push(where('gallery.localName','==',filters.localName))
+        if(filters.galleryName){
+          conditions.push(where('gallery.galleryName','==',filters.galleryName))
         }
         if(filters.localNumber){
           conditions.push(where('gallery.localNumber','==',filters.localNumber))

@@ -64,7 +64,7 @@ export class PointQueryDto {
 
       @IsOptional()
       @IsString()
-      localName?:string
+      galleryName?:string
 
       @IsOptional()
       @IsNumber()
