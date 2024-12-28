@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - development
+      - develop
 
 jobs:
   deploy:
@@ -32,6 +32,6 @@ jobs:
         run: |
           if [ "${{ github.ref_name }}" == "main" ]; then
             npx vercel --prod --token=$VERCEL_TOKEN --confirm
-          elif [ "${{ github.ref_name }}" == "development" ]; then
+          elif [ "${{ github.ref_name }}" == "develop" ]; then
             npx vercel --token=$VERCEL_TOKEN --confirm
           fi
