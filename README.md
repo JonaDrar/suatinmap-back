@@ -45,10 +45,26 @@ Antes de empezar, asegúrate de tener instaladas las siguientes herramientas:
    ```
 
 3. Configura las variables de entorno:
-   - Crea un archivo `.env` en la raíz del proyecto con las siguientes claves:
-     ```
-      PORDEFINIR en el próximo sprint
-     ```
+   
+### 1. Configuracion de conexion con la base de datos Firestore:
+
+Implementacion de la conexion a la base de datos firestore en el archivo `firestore.config.ts`
+
+### 2. Creacion de modulo de configuracion y Implementacion de variables de entorno:
+
+Instalacion de modulo de configuracion con el comando `npm i --save @nestjs/config` y creacion de archivo `.env` para el manejo de variables de entorno
+
+
+### 3. Creacion de endpoints para pruebas con la base de datos:
+
+Se crean los endpoints con los metodos `GET` y `POST` para pruebas de comunicacion con la base de datos 
+
+### 4. Remplazar archivo .env
+
+Recuerda reemplazar el archivo .env.example por .env y agregar tus credenciales de firebase
+
+
+
 
 4. Ejecuta el servidor de desarrollo:
    ```bash
@@ -159,7 +175,3 @@ Este proyecto es obra de **LatamCoders**, una célula de desarrollo colaborativa
 **techXcellerators** impulsa la transformación digital a través del desarrollo de talento en áreas tecnológicas clave, ofreciendo oportunidades reales para que estudiantes colaboren con empresas líderes en soluciones innovadoras.
 
 ---
-
-
-## **Licencia**
-Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para más detalles.
