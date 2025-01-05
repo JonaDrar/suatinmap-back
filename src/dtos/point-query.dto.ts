@@ -59,6 +59,12 @@ export class PointQueryDto {
       type? : number;
   
       @IsOptional()
+      @Transform(({ value }) => {
+        if (typeof value === 'string') {
+          return value.toLowerCase() === 'true';
+        }
+        return value;
+      })
       @IsBoolean()
       highlighted? : boolean;
 

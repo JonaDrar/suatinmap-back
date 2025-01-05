@@ -77,7 +77,7 @@ export class AppService {
         if(filters.longitud){
           conditions.push(where('longitud','==',filters.longitud));
         }
-        if(filters.highlighted){
+        if(filters.highlighted !== undefined){
           conditions.push(where('highlighted','==',filters.highlighted));
         }
         if(filters.type){
