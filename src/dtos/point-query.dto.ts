@@ -21,10 +21,12 @@ export class PointQueryDto {
       address? : string;
   
       @IsOptional()
+      @Transform(({ value }) => parseFloat(value))
       @IsLatitude()
       latitud?: number;
   
       @IsOptional()
+      @Transform(({ value }) => parseFloat(value))
       @IsLongitude()
       longitude? : number;
   

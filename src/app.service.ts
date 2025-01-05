@@ -71,11 +71,11 @@ export class AppService {
         if(filters.commune){
           conditions.push(where('commune','==',filters.commune));
         }
-        if(filters.latitud){
+        if(filters.latitud !== undefined){
           conditions.push(where('latitud','==',filters.latitud));
         }
-        if(filters.longitud){
-          conditions.push(where('longitud','==',filters.longitud));
+        if(filters.longitude !== undefined){
+          conditions.push(where('longitude','==',filters.longitude));
         }
         if(filters.highlighted !== undefined){
           conditions.push(where('highlighted','==',filters.highlighted));
