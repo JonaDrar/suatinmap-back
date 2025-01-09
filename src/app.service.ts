@@ -71,13 +71,13 @@ export class AppService {
         if(filters.commune){
           conditions.push(where('commune','==',filters.commune));
         }
-        if(filters.latitud){
+        if(filters.latitud !== undefined){
           conditions.push(where('latitud','==',filters.latitud));
         }
-        if(filters.longitud){
-          conditions.push(where('longitud','==',filters.longitud));
+        if(filters.longitude !== undefined){
+          conditions.push(where('longitude','==',filters.longitude));
         }
-        if(filters.highlighted){
+        if(filters.highlighted !== undefined){
           conditions.push(where('highlighted','==',filters.highlighted));
         }
         if(filters.type){
@@ -131,6 +131,22 @@ export class AppService {
   async updatePoint(id: string, data: any): Promise<void> {
     try {
       const pointDocRef = doc(this.db, 'MoTPoint', id);
+
+      if (data.gallery) {
+        const galleryUpdates: Record<string, any> = {};
+        if (data.gallery.localNumber !== undefined) {
+          galleryUpdates['gallery.localNumber'] = data.gallery.localNumber;
+        }
+        if (data.gallery.galleryName !== undefined) {
+          galleryUpdates['gallery.galleryName'] = data.gallery.galleryName;
+        }
+
+        if (Object.keys(galleryUpdates).length > 0) {
+          await updateDoc(pointDocRef, galleryUpdates);
+        }
+
+        delete data.gallery;
+      }
       await updateDoc(pointDocRef, data);
       console.log(`Punto con ID ${id} actualizado con éxito.`);
     } catch (error) {
