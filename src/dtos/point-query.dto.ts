@@ -21,12 +21,10 @@ export class PointQueryDto {
       address? : string;
   
       @IsOptional()
-      @Transform(({ value }) => parseFloat(value))
       @IsLatitude()
       latitud?: number;
   
       @IsOptional()
-      @Transform(({ value }) => parseFloat(value))
       @IsLongitude()
       longitude? : number;
   
@@ -61,12 +59,6 @@ export class PointQueryDto {
       type? : number;
   
       @IsOptional()
-      @Transform(({ value }) => {
-        if (typeof value === 'string') {
-          return value.toLowerCase() === 'true';
-        }
-        return value;
-      })
       @IsBoolean()
       highlighted? : boolean;
 

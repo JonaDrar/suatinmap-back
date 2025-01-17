@@ -4,14 +4,12 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 
 class JsonObjectDTo{
-    @IsOptional()
     @IsString()
-    @ApiProperty({description:'Nombre de la galería'})
+    @ApiProperty({description:'Nombre de la galeria'})
     galleryName:string;
     
-    @IsOptional()
     @IsString()
-    @ApiProperty({description:'Número del local'})
+    @ApiProperty({description:'Numero del local'})
     localNumber:string;
 
 }

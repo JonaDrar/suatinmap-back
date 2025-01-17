@@ -41,7 +41,7 @@ export class AppController {
   @ApiQuery({ name: 'type', required: false, type: Number, description: 'Numero de tipo(1-Peluqueria,2-Peluqueria canina,3-Centro de acopio,4-Centro de estudio)' })
   @ApiQuery({ name: 'highlighted', required: false, type: Boolean, description: 'Destacado' })
   @ApiQuery({ name: 'galleryName', required: false, type: String, description: 'Nombre de la Galeria' })
-  @ApiQuery({ name: 'localNumber', required: false, type: String, description: 'Numero del local en la galeria' })
+  @ApiQuery({ name: 'localNumber', required: false, type: Number, description: 'Numero del local en la galeria' })
 
   async getFilteredPoints(@Query() filters: PointQueryDto) {
     console.log(filters)
