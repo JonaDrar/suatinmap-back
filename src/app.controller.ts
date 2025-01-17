@@ -4,6 +4,7 @@ import { CreateUser } from './dtos/create-user.dto';
 import { CreatePoint } from './dtos/create-points.dto';
 import { PointQueryDto } from './dtos/point-query.dto';
 import { ApiOperation, ApiBody,ApiQuery } from '@nestjs/swagger';
+import { UpdatePoint } from './dtos/update-points.dto';
 
 @Controller()
 export class AppController {
@@ -54,8 +55,8 @@ export class AppController {
   }
 
   @Put('/points/:id')
-  @ApiOperation({ summary: 'Actualiza un punto' })@ApiBody({ type: CreatePoint }) 
-  async updatePoint(@Param('id') id: string, @Body() data: any): Promise<void> {
+  @ApiOperation({ summary: 'Actualiza un punto' })@ApiBody({ type: UpdatePoint }) 
+  async updatePoint(@Param('id') id: string, @Body() data: UpdatePoint): Promise<void> {
     await this.appService.updatePoint(id, data);
   }
 
