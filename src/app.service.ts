@@ -94,21 +94,24 @@ export class AppService {
         if(filters.localNumber){
           conditions.push(where('gallery.localNumber','==',filters.localNumber))
         }
-        // Agregamos los nuevos filtros
-        if (filters.rrss) {
-          // Filtrar por cualquier campo dentro de rrss (ejemplo con Facebook)
-          if (filters.rrss.facebook) {
-            conditions.push(where('rrss.facebook', '==', filters.rrss.facebook));
-          }
-          if (filters.rrss.instagram) {
-            conditions.push(where('rrss.instagram', '==', filters.rrss.instagram));
-          }
-          if (filters.rrss.twitter) {
-            conditions.push(where('rrss.twitter', '==', filters.rrss.twitter));
-          }
-          if (filters.rrss.other) {
-            conditions.push(where('rrss.other', '==', filters.rrss.other));
-          }
+        // Filtrar por Facebook
+        if (filters.facebook) {
+          conditions.push(where('rrss.facebook', '==', filters.facebook));
+        }
+
+        // Filtrar por Instagram
+        if (filters.instagram) {
+            conditions.push(where('rrss.instagram', '==', filters.instagram));
+        }
+
+        // Filtrar por Twitter
+        if (filters.twitter) {
+            conditions.push(where('rrss.twitter', '==', filters.twitter));
+        }
+
+        // Filtrar por "other" (otras redes sociales)
+        if (filters.other) {
+            conditions.push(where('rrss.other', '==', filters.other));
         }
 
         if (filters.phone) {

@@ -1,28 +1,6 @@
-import { IsOptional, IsString, IsBoolean, IsLatitude, IsLongitude, MaxLength, MinLength, IsInt, Min, Max, IsObject, ValidateNested } from "class-validator";
+import { IsOptional, IsString, IsBoolean, IsLatitude, IsLongitude, MaxLength, MinLength, IsInt, Min, Max, IsObject, ValidateNested, IsUrl } from "class-validator";
 import { Transform, Type } from "class-transformer";
 import { ApiPropertyOptional } from "@nestjs/swagger";
-
-class SocialMediaLinks {
-  @IsOptional()
-  @IsString()
-  @ApiPropertyOptional({ description: 'URL de Facebook' })
-  facebook?: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiPropertyOptional({ description: 'URL de Instagram' })
-  instagram?: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiPropertyOptional({ description: 'URL de Twitter' })
-  twitter?: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiPropertyOptional({ description: 'URL de otra red social' })
-  other?: string;
-}
 
 export class PointQueryDto {
 
@@ -101,13 +79,22 @@ export class PointQueryDto {
   @IsString()
   localNumber?:string
 
-  // Redes sociales
+  // Redes sociales separadas
   @IsOptional()
-  @IsObject()
-  @ValidateNested()
-  @Type(() => SocialMediaLinks)
-  @ApiPropertyOptional({ description: 'Redes sociales' })
-  rrss?: SocialMediaLinks;
+  @IsUrl()
+  facebook?: string;
+
+  @IsOptional()
+  @IsUrl()
+  instagram?: string;
+
+  @IsOptional()
+  @IsUrl()
+  twitter?: string;
+
+  @IsOptional()
+  @IsUrl()
+  other?: string;
 
   // Campo para teléfono
   @IsOptional()
