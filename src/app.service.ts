@@ -42,6 +42,11 @@ export class AppService {
 
   async createPoint(data: any): Promise<void> {
     try {
+      // Validamos rrss como un objeto, por si se envía vacío
+      if (!data.rrss) {
+        data.rrss = {};
+      }
+
       const docRef = await addDoc(collection(this.db, 'MoTPoint'), data);
       console.log('Punto Creado con exito', docRef.id); 
     } catch (error) {
@@ -88,6 +93,26 @@ export class AppService {
         }
         if(filters.localNumber){
           conditions.push(where('gallery.localNumber','==',filters.localNumber))
+        }
+        // Agregamos los nuevos filtros
+        if (filters.rrss) {
+          // Filtrar por cualquier campo dentro de rrss (ejemplo con Facebook)
+          if (filters.rrss.facebook) {
+            conditions.push(where('rrss.facebook', '==', filters.rrss.facebook));
+          }
+          if (filters.rrss.instagram) {
+            conditions.push(where('rrss.instagram', '==', filters.rrss.instagram));
+          }
+          if (filters.rrss.twitter) {
+            conditions.push(where('rrss.twitter', '==', filters.rrss.twitter));
+          }
+          if (filters.rrss.other) {
+            conditions.push(where('rrss.other', '==', filters.rrss.other));
+          }
+        }
+
+        if (filters.phone) {
+          conditions.push(where('phone', '==', filters.phone));
         }
           
 
@@ -147,6 +172,36 @@ export class AppService {
 
         delete data.gallery;
       }
+
+      // Validar y actualizar rrss
+      if (data.rrss) {
+        const rrssUpdates: Record<string, any> = {};
+        if (data.rrss.facebook !== undefined) {
+          rrssUpdates['rrss.facebook'] = data.rrss.facebook;
+        }
+        if (data.rrss.instagram !== undefined) {
+          rrssUpdates['rrss.instagram'] = data.rrss.instagram;
+        }
+        if (data.rrss.twitter !== undefined) {
+          rrssUpdates['rrss.twitter'] = data.rrss.twitter;
+        }
+        if (data.rrss.other !== undefined) {
+          rrssUpdates['rrss.other'] = data.rrss.other;
+        }
+
+        if (Object.keys(rrssUpdates).length > 0) {
+          await updateDoc(pointDocRef, rrssUpdates);
+        }
+
+        delete data.rrss;
+      }
+
+      // Validar y actualizar teléfono
+      if (data.phone) {
+        await updateDoc(pointDocRef, { phone: data.phone });
+        delete data.phone;
+      }
+
       await updateDoc(pointDocRef, data);
       console.log(`Punto con ID ${id} actualizado con éxito.`);
     } catch (error) {
