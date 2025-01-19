@@ -16,6 +16,28 @@ class JsonObjectDTo{
 
 }
 
+class SocialMediaLinks {
+    @IsOptional()
+    @IsUrl()
+    @ApiPropertyOptional({ description: 'URL de Facebook' })
+    facebook?: string;
+
+    @IsOptional()
+    @IsUrl()
+    @ApiPropertyOptional({ description: 'URL de Instagram' })
+    instagram?: string;
+
+    @IsOptional()
+    @IsUrl()
+    @ApiPropertyOptional({ description: 'URL de Twitter' })
+    twitter?: string;
+
+    @IsOptional()
+    @IsUrl()
+    @ApiPropertyOptional({ description: 'URL de otra red social' })
+    other?: string;
+}
+
 
 export class CreatePoint {
 
@@ -90,5 +112,17 @@ export class CreatePoint {
     @ApiPropertyOptional({description:"Eliminar(Eliminado=true/No Eliminado=false)",default:false})
     deleted : boolean = false;
 
+    @IsOptional()
+    @IsObject()
+    @ValidateNested()
+    @ApiPropertyOptional({ description: 'Redes sociales' })
+    @Type(() => SocialMediaLinks)
+    rrss?: SocialMediaLinks;
 
+    @IsString()
+    @MinLength(7)
+    @MaxLength(15)
+    @IsOptional()
+    @ApiPropertyOptional({ description: 'Teléfono de contacto' })
+    phone: string;
 }
