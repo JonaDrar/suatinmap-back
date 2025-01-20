@@ -30,9 +30,9 @@ export class AppController {
 
   @Get('/points?')
   @ApiOperation({ summary: 'Obtener puntos filtrados' })
-  @ApiQuery({ name: 'name', required: false, type: String, description: 'Nombre' }) 
+  @ApiQuery({ name: 'name', required: false, type: String, description: 'Nombre (parcial o completo)' }) 
   @ApiQuery({ name: 'description', required: false, type: String, description: 'Descripcion' })
-  @ApiQuery({ name: 'address', required: false, type: String, description: 'Direccion' })
+  @ApiQuery({ name: 'address', required: false, type: String, description: 'Dirección (parcial o completa)' })
   @ApiQuery({ name: 'latitud', required: false, type: Number, description: 'Latitud' })
   @ApiQuery({ name: 'longitude', required: false, type: Number, description: 'Longitud ' })
   @ApiQuery({ name: 'region', required: false, type: String, description: 'Region' })

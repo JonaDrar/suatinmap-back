@@ -42,6 +42,16 @@ export class AppService {
 
   async createPoint(data: any): Promise<void> {
     try {
+      // Generar campos normalizados
+      data.normalizedName = data.name
+          .toLowerCase()
+          .split(' ')
+          .filter(word => word.length > 0);
+      data.normalizedAddress = data.address
+          .toLowerCase()
+          .split(' ')
+          .filter(word => word.length > 0);
+
       // Validamos rrss como un objeto, por si se envía vacío
       if (!data.rrss) {
         data.rrss = {};
@@ -51,21 +61,34 @@ export class AppService {
       console.log('Punto Creado con exito', docRef.id); 
     } catch (error) {
       console.error('Punto no creado', error);
+      throw new Error('No se pudo crear el punto');
     }
+  }
+
+  // Método para normalizar texto
+  private normalizeText(text: string): string[] {
+    if (!text) return [];
+    return text
+      .toLowerCase()
+      .split(/[\s,]+/)
+      .filter((word) => word.trim().length > 0);
   }
 
   async  getFilteredPoints(filters:any){
     try {
         let pointCollection = collection(this.db, 'MoTPoint');
         let conditions =[];
+        
         if(filters.name){
-        conditions.push(where('name','==',filters.name));
+          const keywords = this.normalizeText(filters.name);
+          conditions.push(where('normalizedName', 'array-contains-any', keywords));
         }
         if(filters.description){
           conditions.push(where('description','==',filters.description));
         }
         if(filters.address){
-          conditions.push(where('address','==',filters.address));
+          const keywords = this.normalizeText(filters.address);
+          conditions.push(where('normalizedAddress', 'array-contains-any', keywords));
         }
         if (filters.services && filters.services.length > 0) {
           conditions.push(where('services', 'array-contains-any', filters.services));
@@ -203,6 +226,14 @@ export class AppService {
       if (data.phone) {
         await updateDoc(pointDocRef, { phone: data.phone });
         delete data.phone;
+      }
+
+      // Generar y actualizar campos normalizados si es necesario
+      if (data.name) {
+        data.normalizedName = this.normalizeText(data.name);
+      }
+      if (data.address) {
+        data.normalizedAddress = this.normalizeText(data.address);
       }
 
       await updateDoc(pointDocRef, data);

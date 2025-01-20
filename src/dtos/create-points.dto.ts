@@ -47,6 +47,14 @@ export class CreatePoint {
     @ApiProperty({description:'Nombre',maxLength:30,minLength:2})
     name : string;
 
+    @IsArray()
+    @IsOptional()
+    @ApiPropertyOptional({
+        description: 'Nombre normalizado (minúsculas y palabras separadas por coma)',
+        example: ['nombre', 'de', 'prueba'],
+    })
+    normalizedName?: string[];
+
     @IsString()
     @MaxLength(140)
     @ApiProperty({description:'Descripcion',maxLength:140})
@@ -57,6 +65,14 @@ export class CreatePoint {
     @MinLength(2)
     @ApiProperty({description:'Direccion',maxLength:30,minLength:2})
     address : string;
+
+    @IsArray()
+    @IsOptional()
+    @ApiPropertyOptional({
+        description: 'Dirección normalizada (minúsculas y palabras separadas por coma)',
+        example: ['direccion', 'de', 'prueba'],
+    })
+    normalizedAddress?: string[];
 
     @IsLatitude()
     @ApiProperty({description:'Latitud'})
