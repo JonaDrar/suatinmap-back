@@ -30,9 +30,9 @@ export class AppController {
 
   @Get('/points?')
   @ApiOperation({ summary: 'Obtener puntos filtrados' })
-  @ApiQuery({ name: 'name', required: false, type: String, description: 'Nombre' }) 
+  @ApiQuery({ name: 'name', required: false, type: String, description: 'Nombre (parcial o completo)' }) 
   @ApiQuery({ name: 'description', required: false, type: String, description: 'Descripcion' })
-  @ApiQuery({ name: 'address', required: false, type: String, description: 'Direccion' })
+  @ApiQuery({ name: 'address', required: false, type: String, description: 'Dirección (parcial o completa)' })
   @ApiQuery({ name: 'latitud', required: false, type: Number, description: 'Latitud' })
   @ApiQuery({ name: 'longitude', required: false, type: Number, description: 'Longitud ' })
   @ApiQuery({ name: 'region', required: false, type: String, description: 'Region' })
@@ -42,6 +42,11 @@ export class AppController {
   @ApiQuery({ name: 'highlighted', required: false, type: Boolean, description: 'Destacado' })
   @ApiQuery({ name: 'galleryName', required: false, type: String, description: 'Nombre de la Galeria' })
   @ApiQuery({ name: 'localNumber', required: false, type: String, description: 'Numero del local en la galeria' })
+  @ApiQuery({ name: 'phone', required: false, type: String, description: 'Número de teléfono' }) 
+  @ApiQuery({ name: 'facebook', required: false, type: String, description: 'URL de Facebook' }) 
+  @ApiQuery({ name: 'instagram', required: false, type: String, description: 'URL de Instagram' }) 
+  @ApiQuery({ name: 'twitter', required: false, type: String, description: 'URL de Twitter' }) 
+  @ApiQuery({ name: 'other', required: false, type: String, description: 'URL de otra red social' })
 
   async getFilteredPoints(@Query() filters: PointQueryDto) {
     console.log(filters)

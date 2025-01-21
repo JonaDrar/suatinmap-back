@@ -42,25 +42,53 @@ export class AppService {
 
   async createPoint(data: any): Promise<void> {
     try {
+      // Generar campos normalizados
+      data.normalizedName = data.name
+          .toLowerCase()
+          .split(' ')
+          .filter(word => word.length > 0);
+      data.normalizedAddress = data.address
+          .toLowerCase()
+          .split(' ')
+          .filter(word => word.length > 0);
+
+      // Validamos rrss como un objeto, por si se envía vacío
+      if (!data.rrss) {
+        data.rrss = {};
+      }
+
       const docRef = await addDoc(collection(this.db, 'MoTPoint'), data);
       console.log('Punto Creado con exito', docRef.id); 
     } catch (error) {
       console.error('Punto no creado', error);
+      throw new Error('No se pudo crear el punto');
     }
+  }
+
+  // Método para normalizar texto
+  private normalizeText(text: string): string[] {
+    if (!text) return [];
+    return text
+      .toLowerCase()
+      .split(/[\s,]+/)
+      .filter((word) => word.trim().length > 0);
   }
 
   async  getFilteredPoints(filters:any){
     try {
         let pointCollection = collection(this.db, 'MoTPoint');
         let conditions =[];
+        
         if(filters.name){
-        conditions.push(where('name','==',filters.name));
+          const keywords = this.normalizeText(filters.name);
+          conditions.push(where('normalizedName', 'array-contains-any', keywords));
         }
         if(filters.description){
           conditions.push(where('description','==',filters.description));
         }
         if(filters.address){
-          conditions.push(where('address','==',filters.address));
+          const keywords = this.normalizeText(filters.address);
+          conditions.push(where('normalizedAddress', 'array-contains-any', keywords));
         }
         if (filters.services && filters.services.length > 0) {
           conditions.push(where('services', 'array-contains-any', filters.services));
@@ -88,6 +116,29 @@ export class AppService {
         }
         if(filters.localNumber){
           conditions.push(where('gallery.localNumber','==',filters.localNumber))
+        }
+        // Filtrar por Facebook
+        if (filters.facebook) {
+          conditions.push(where('rrss.facebook', '==', filters.facebook));
+        }
+
+        // Filtrar por Instagram
+        if (filters.instagram) {
+            conditions.push(where('rrss.instagram', '==', filters.instagram));
+        }
+
+        // Filtrar por Twitter
+        if (filters.twitter) {
+            conditions.push(where('rrss.twitter', '==', filters.twitter));
+        }
+
+        // Filtrar por "other" (otras redes sociales)
+        if (filters.other) {
+            conditions.push(where('rrss.other', '==', filters.other));
+        }
+
+        if (filters.phone) {
+          conditions.push(where('phone', '==', filters.phone));
         }
           
 
@@ -147,6 +198,44 @@ export class AppService {
 
         delete data.gallery;
       }
+
+      // Validar y actualizar rrss
+      if (data.rrss) {
+        const rrssUpdates: Record<string, any> = {};
+        if (data.rrss.facebook !== undefined) {
+          rrssUpdates['rrss.facebook'] = data.rrss.facebook;
+        }
+        if (data.rrss.instagram !== undefined) {
+          rrssUpdates['rrss.instagram'] = data.rrss.instagram;
+        }
+        if (data.rrss.twitter !== undefined) {
+          rrssUpdates['rrss.twitter'] = data.rrss.twitter;
+        }
+        if (data.rrss.other !== undefined) {
+          rrssUpdates['rrss.other'] = data.rrss.other;
+        }
+
+        if (Object.keys(rrssUpdates).length > 0) {
+          await updateDoc(pointDocRef, rrssUpdates);
+        }
+
+        delete data.rrss;
+      }
+
+      // Validar y actualizar teléfono
+      if (data.phone) {
+        await updateDoc(pointDocRef, { phone: data.phone });
+        delete data.phone;
+      }
+
+      // Generar y actualizar campos normalizados si es necesario
+      if (data.name) {
+        data.normalizedName = this.normalizeText(data.name);
+      }
+      if (data.address) {
+        data.normalizedAddress = this.normalizeText(data.address);
+      }
+
       await updateDoc(pointDocRef, data);
       console.log(`Punto con ID ${id} actualizado con éxito.`);
     } catch (error) {
