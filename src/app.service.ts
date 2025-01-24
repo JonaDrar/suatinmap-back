@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config'; // Asegúrate de importar ConfigService
 import { firebaseDatabase } from 'src/config/firestore.config'; // Asegúrate de que la configuración esté correcta
 import { collection, addDoc, getDocs, query, where, updateDoc, doc } from 'firebase/firestore';
+import cloudinary, { configureCloudinary } from './config/cloudinary.config';
+import { Multer } from 'multer';
+import { UploadApiResponse, UploadApiErrorResponse } from 'cloudinary';
 
 @Injectable()
 export class AppService {
@@ -252,6 +255,18 @@ export class AppService {
     } catch (error) {
       console.error(`Error al marcar el punto como eliminado: ${error}`);
       throw new Error('No se pudo marcar el punto como eliminado.');
+    }
+  }
+
+  async uploadImageToCloudinary(file: Express.Multer.File): Promise<string> {
+    try {
+      const result: UploadApiResponse = await cloudinary.v2.uploader.upload(file.path, {
+        folder: 'Home/Mot',  // Puedes personalizar la carpeta donde se guardarán las imágenes
+      });
+      return result.secure_url;  // La URL de la imagen subida a Cloudinary
+    } catch (error) {
+      console.error('Error subiendo imagen a Cloudinary', error);
+      throw new Error('No se pudo subir la imagen a Cloudinary');
     }
   }
 }
