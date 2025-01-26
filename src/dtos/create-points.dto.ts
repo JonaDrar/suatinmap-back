@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { ArrayMaxSize, IsArray, IsBoolean, IsInt, IsLatitude, IsLongitude, IsNumber, IsObject, IsOptional, IsString, IsUrl, Max, MaxLength, Min, MinLength, ValidateNested ,} from "class-validator";
+import { ArrayMaxSize, IsArray, IsBoolean, IsInt, IsLatitude, IsLongitude, IsNumber, IsObject, IsOptional, IsString, IsUrl, Max, MaxLength, Min, MinLength, ValidateNested, IsISO8601} from "class-validator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 
@@ -141,4 +141,18 @@ export class CreatePoint {
     @IsOptional()
     @ApiPropertyOptional({ description: 'Teléfono de contacto' })
     phone: string;
+
+    @IsBoolean()
+    @ApiProperty({ description: 'Estado activo (manual)', default: false })
+    isActive: boolean = false;
+
+    @IsOptional()
+    @IsISO8601()
+    @ApiPropertyOptional({ description: 'Fecha de inicio de la activación', type: String, format: 'date-time' })
+    activationStartDate?: Date;
+
+    @IsOptional()
+    @IsISO8601()
+    @ApiPropertyOptional({ description: 'Fecha de fin de la activación', type: String, format: 'date-time' })
+    activationEndDate?: Date;
 }

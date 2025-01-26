@@ -57,6 +57,14 @@ export class AppService {
         data.rrss = {};
       }
 
+      // Verificar estado activo según las fechas
+      if (data.activationStartDate && data.activationEndDate) {
+        const now = new Date();
+        const startDate = new Date(data.activationStartDate);
+        const endDate = new Date(data.activationEndDate);
+        data.isActive = now >= startDate && now <= endDate;
+      }
+
       const docRef = await addDoc(collection(this.db, 'MoTPoint'), data);
       console.log('Punto Creado con exito', docRef.id); 
     } catch (error) {
@@ -252,6 +260,38 @@ export class AppService {
     } catch (error) {
       console.error(`Error al marcar el punto como eliminado: ${error}`);
       throw new Error('No se pudo marcar el punto como eliminado.');
+    }
+  }
+
+  async checkAndUpdatePoints(): Promise<void> {
+    try {
+      const pointCollection = collection(this.db, 'MoTPoint');
+      const q = query(pointCollection, where('deleted', '==', false));
+      const querySnapshot = await getDocs(q);
+
+      const now = new Date();
+
+      for (const docSnap of querySnapshot.docs) {
+        const data = docSnap.data();
+        const startDate = data.activationStartDate ? new Date(data.activationStartDate) : null;
+        const endDate = data.activationEndDate ? new Date(data.activationEndDate) : null;
+
+        let isActive = data.isActive;
+        if (startDate && endDate) {
+          isActive = now >= startDate && now <= endDate;
+        } else if (startDate && now >= startDate) {
+          isActive = true;
+        } else if (endDate && now > endDate) {
+          isActive = false;
+        }
+
+        if (data.isActive !== isActive) {
+          await updateDoc(docSnap.ref, { isActive });
+          console.log(`Punto con ID ${docSnap.id} actualizado: isActive = ${isActive}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error verificando y actualizando puntos', error);
     }
   }
 }
