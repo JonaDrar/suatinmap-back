@@ -1,6 +1,7 @@
 import { Type } from "class-transformer";
-import { ArrayMaxSize, IsArray, IsBoolean, IsInt, IsLatitude, IsLongitude, IsNumber, IsObject, IsOptional, IsString, IsUrl, Max, MaxLength, Min, MinLength, ValidateNested, IsISO8601} from "class-validator";
+import { ArrayMaxSize, IsArray, IsBoolean, IsInt, IsLatitude, IsLongitude, IsNumber, IsObject, IsOptional, IsString, IsUrl, Max, MaxLength, Min, MinLength, ValidateNested, IsISO8601, IsDateString, Validate} from "class-validator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { IsDateAfterNow } from '../validators/is-date-after-now.validator';
 
 
 class JsonObjectDTo{
@@ -143,16 +144,17 @@ export class CreatePoint {
     phone: string;
 
     @IsBoolean()
-    @ApiProperty({ description: 'Estado activo (manual)', default: false })
+    @ApiProperty({ description: 'Estado activo', default: false })
     isActive: boolean = false;
 
     @IsOptional()
-    @IsISO8601()
-    @ApiPropertyOptional({ description: 'Fecha de inicio de la activación', type: String, format: 'date-time' })
-    activationStartDate?: Date;
+    @IsDateString()
+    @ApiPropertyOptional({ description: 'Fecha de inicio de la activación', type: String, format: 'date' })
+    activationStartDate?: Date = new Date();
 
     @IsOptional()
-    @IsISO8601()
-    @ApiPropertyOptional({ description: 'Fecha de fin de la activación', type: String, format: 'date-time' })
+    @IsDateString()
+    @Validate(IsDateAfterNow)
+    @ApiPropertyOptional({ description: 'Fecha de fin de la activación', type: String, format: 'date' })
     activationEndDate?: Date;
 }
