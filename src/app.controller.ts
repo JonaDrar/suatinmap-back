@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateUser } from './dtos/create-user.dto';
 import { CreatePoint } from './dtos/create-points.dto';
 import { PointQueryDto } from './dtos/point-query.dto';
 import { ApiOperation, ApiBody,ApiQuery } from '@nestjs/swagger';
 import { UpdatePoint } from './dtos/update-points.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller()
 export class AppController {
@@ -69,6 +70,14 @@ export class AppController {
   @ApiOperation({ summary: 'Eliminar un punto' })
   async deletePoint(@Param('id') id: string): Promise<void> {
     await this.appService.deletePoint(id);
+  }
+
+  @Post('/upload/image')
+  @ApiOperation({ summary: 'Sube una imagen a Cloudinary' })
+  @UseInterceptors(FileInterceptor('file')) // 'file' es el nombre del campo del formulario
+  async uploadImage(@UploadedFile() file: Express.Multer.File) {
+    const imageUrl = await this.appService.uploadImageToCloudinary(file);
+    return { url: imageUrl };
   }
 
 }

@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config'; // Asegúrate de importar ConfigService
 import { firebaseDatabase } from 'src/config/firestore.config'; // Asegúrate de que la configuración esté correcta
-import { collection, addDoc, getDocs, query, where, updateDoc, doc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, updateDoc, doc } from 'firebase/firestore';
+import cloudinary, { configureCloudinary } from './config/cloudinary.config';
+import { Multer } from 'multer';
+import { UploadApiResponse, UploadApiErrorResponse } from 'cloudinary';
 
 @Injectable()
 export class AppService {
@@ -314,35 +317,16 @@ export class AppService {
     }
   }
 
-  async checkAndUpdatePoints(): Promise<void> {
+  async uploadImageToCloudinary(file: Express.Multer.File): Promise<string> {
     try {
-      const pointCollection = collection(this.db, 'MoTPoint');
-      const q = query(pointCollection, where('deleted', '==', false));
-      const querySnapshot = await getDocs(q);
-
-      const now = new Date();
-
-      for (const docSnap of querySnapshot.docs) {
-        const data = docSnap.data();
-        const startDate = data.activationStartDate ? new Date(data.activationStartDate + 'T00:00:00Z') : null;
-        const endDate = data.activationEndDate ? new Date(data.activationEndDate + 'T00:00:00Z') : null;
-
-        let isActive = false;
-        if (startDate && endDate) {
-          isActive = now >= startDate && now <= endDate;
-        } else if (startDate && now >= startDate) {
-          isActive = true;
-        } else if (endDate && now > endDate) {
-          isActive = false;
-        }
-
-        if (data.isActive !== isActive) {
-          await updateDoc(docSnap.ref, { isActive });
-          console.log(`Punto con ID ${docSnap.id} actualizado: isActive = ${isActive}`);
-        }
-      }
+      const folder = process.env.CLOUDINARY_FOLDER || 'default-folder';
+      const result: UploadApiResponse = await cloudinary.v2.uploader.upload(file.path, {
+        folder, 
+      });
+      return result.secure_url;  // La URL de la imagen subida a Cloudinary
     } catch (error) {
-      console.error('Error verificando y actualizando puntos', error);
+      console.error('Error subiendo imagen a Cloudinary', error);
+      throw new Error('No se pudo subir la imagen a Cloudinary');
     }
   }
 }
