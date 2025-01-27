@@ -260,8 +260,9 @@ export class AppService {
 
   async uploadImageToCloudinary(file: Express.Multer.File): Promise<string> {
     try {
+      const folder = process.env.CLOUDINARY_FOLDER || 'default-folder';
       const result: UploadApiResponse = await cloudinary.v2.uploader.upload(file.path, {
-        folder: 'Home/Mot',  // Puedes personalizar la carpeta donde se guardarán las imágenes
+        folder, 
       });
       return result.secure_url;  // La URL de la imagen subida a Cloudinary
     } catch (error) {
