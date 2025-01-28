@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config'; // Asegúrate de importar ConfigService
 import { firebaseDatabase } from 'src/config/firestore.config'; // Asegúrate de que la configuración esté correcta
-import { collection, addDoc, getDocs, query, where, updateDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, updateDoc, doc, getDoc } from 'firebase/firestore';
 import cloudinary, { configureCloudinary } from './config/cloudinary.config';
 import { Multer } from 'multer';
 import { UploadApiResponse, UploadApiErrorResponse } from 'cloudinary';
