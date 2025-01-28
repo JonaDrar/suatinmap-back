@@ -62,17 +62,25 @@ export class AppService {
 
       // Verificar estado activo según las fechas
       if (data.activationStartDate && data.activationEndDate) {
-        const startDate = data.activationStartDate ? new Date(data.activationStartDate + 'T00:00:00Z') : null;
-        const endDate = data.activationEndDate ? new Date(data.activationEndDate + 'T00:00:00Z') : null;
-  
-        if (endDate < startDate) {
+        const startDate = data.activationStartDate ? new Date(data.activationStartDate).toISOString() : null;
+        const endDate = data.activationEndDate ? new Date(data.activationEndDate).toISOString() : null;
+
+        if (endDate && startDate && new Date(endDate) < new Date(startDate)) {
           throw new Error('La fecha de término debe ser igual o mayor a la fecha de inicio.');
         }
-  
+
         const now = new Date();
-        data.isActive = now >= startDate && now <= endDate;
+        data.isActive = now >= new Date(startDate) && now <= new Date(endDate);
       } else {
         data.isActive = false; // Por defecto, si no hay fechas, no está activo
+      }
+
+      // Aseguramos que las fechas están en formato ISO
+      if (data.activationStartDate) {
+        data.activationStartDate = new Date(data.activationStartDate).toISOString();
+      }
+      if (data.activationEndDate) {
+        data.activationEndDate = new Date(data.activationEndDate).toISOString();
       }
 
       const docRef = await addDoc(collection(this.db, 'MoTPoint'), data);
@@ -264,10 +272,10 @@ export class AppService {
 
       // Normalizar fechas si se envían
     if (data.activationStartDate) {
-      data.activationStartDate = new Date(data.activationStartDate + 'T00:00:00Z').toISOString();
+      data.activationStartDate = new Date(data.activationStartDate).toISOString();
     }
     if (data.activationEndDate) {
-      data.activationEndDate = new Date(data.activationEndDate + 'T00:00:00Z').toISOString();
+      data.activationEndDate = new Date(data.activationEndDate).toISOString();
     }
 
     // Validar que la fecha de término sea mayor o igual a la de inicio
