@@ -58,7 +58,7 @@ export class PointQueryDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  @Max(4)
+  @Max(5)
   type? : number;
 
   @IsOptional()

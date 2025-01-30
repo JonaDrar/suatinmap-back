@@ -39,7 +39,7 @@ export class AppController {
   @ApiQuery({ name: 'region', required: false, type: String, description: 'Region' })
   @ApiQuery({ name: 'commune', required: false, type: String, description: 'Comuna' })
   @ApiQuery({ name: 'services', required: false, type: String, description: 'Servicios(Separar servicios con coma)' })
-  @ApiQuery({ name: 'type', required: false, type: Number, description: 'Numero de tipo(1-Peluqueria,2-Peluqueria canina,3-Centro de acopio,4-Centro de estudio)' })
+  @ApiQuery({ name: 'type', required: false, type: Number, description: 'Numero de tipo(1-Peluqueria,2-Peluqueria canina,3-Centro de acopio,4-Centro de estudio,5-Otros)' })
   @ApiQuery({ name: 'highlighted', required: false, type: Boolean, description: 'Destacado' })
   @ApiQuery({ name: 'galleryName', required: false, type: String, description: 'Nombre de la Galeria' })
   @ApiQuery({ name: 'localNumber', required: false, type: String, description: 'Numero del local en la galeria' })

@@ -107,8 +107,8 @@ export class CreatePoint {
 
     @IsInt()
     @Min(1)
-    @Max(4)
-    @ApiProperty({description:'Numero de tipo(1-Peluqueria,2-Peluqueria canina,3-Centro de acopio,4-Centro de estudio)',minimum:1,maximum:4})
+    @Max(5)
+    @ApiProperty({description:'Numero de tipo(1-Peluqueria,2-Peluqueria canina,3-Centro de acopio,4-Centro de estudio,5-Otros)',minimum:1,maximum:5})
     type : number;
 
     @IsBoolean()
