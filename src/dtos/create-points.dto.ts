@@ -106,11 +106,16 @@ export class CreatePoint {
     @ApiPropertyOptional({description:'Servicios'})
     services : string[];
 
-    @IsInt()
-    @Min(1)
-    @Max(4)
-    @ApiProperty({description:'Numero de tipo(1-Peluqueria,2-Peluqueria canina,3-Centro de acopio,4-Centro de estudio)',minimum:1,maximum:4})
-    type : number;
+    @IsArray()
+    @ArrayMaxSize(5)
+    @Type(() => Number)
+    @IsInt({ each: true })
+    @Min(1, { each: true })
+    @Max(5, { each: true }) 
+    @ApiProperty({description:'Numero de tipo(1-Peluqueria,2-Peluqueria canina,3-Centro de acopio,4-Centro de estudio,5-Otro), Separar con coma',
+    example:[1,2,3]
+    })
+    type : number[];
 
     @IsBoolean()
     @ApiProperty({description:'Destacado'})

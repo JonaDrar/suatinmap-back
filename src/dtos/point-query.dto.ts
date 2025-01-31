@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsBoolean, IsLatitude, IsLongitude, MaxLength, MinLength, IsInt, Min, Max, IsObject, ValidateNested, IsUrl } from "class-validator";
+import { IsOptional, IsString, IsBoolean, IsLatitude, IsLongitude, MaxLength, MinLength, IsInt, Min, Max, IsObject, ValidateNested, IsUrl, IsArray, ArrayMaxSize } from "class-validator";
 import { Transform, Type } from "class-transformer";
 import { ApiPropertyOptional } from "@nestjs/swagger";
 
@@ -54,13 +54,29 @@ export class PointQueryDto {
   })
   services?: string[];
 
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  @Max(4)
-  type? : number;
 
+  @IsOptional()
+  @Transform(({ value }) => {
+    // Si el valor es una cadena, lo convertimos en un array de números
+    if (typeof value === 'string') {
+      return value.split(',')
+        .map(item => parseInt(item.trim(), 10)) // Convierte a número entero
+        .filter(num => !isNaN(num)); // Filtra valores no numéricos
+    }
+    
+    // Si ya es un array, aseguramos que todos sean números
+    if (Array.isArray(value)) {
+      return value.map(item => parseInt(item, 10)).filter(num => !isNaN(num));
+    }
+  
+    return value; // Retorna el valor tal cual si no es una cadena ni un array
+  })
+  @IsArray()
+  @Min(1, { each: true })
+  @Max(5, { each: true })
+  type?: string[];
+
+  
   @IsOptional()
   @Transform(({ value }) => {
     if (typeof value === 'string') {
