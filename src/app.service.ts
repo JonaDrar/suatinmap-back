@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config'; // Asegúrate de importar ConfigService
 import { firebaseDatabase } from 'src/config/firestore.config'; // Asegúrate de que la configuración esté correcta
-import { collection, addDoc, getDocs, query, where, updateDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, updateDoc, doc, getDoc } from 'firebase/firestore';
 import cloudinary, { configureCloudinary } from './config/cloudinary.config';
 import { Multer } from 'multer';
 import { UploadApiResponse, UploadApiErrorResponse } from 'cloudinary';
@@ -58,6 +58,29 @@ export class AppService {
       // Validamos rrss como un objeto, por si se envía vacío
       if (!data.rrss) {
         data.rrss = {};
+      }
+
+      // Verificar estado activo según las fechas
+      if (data.activationStartDate && data.activationEndDate) {
+        const startDate = data.activationStartDate ? new Date(data.activationStartDate).toISOString() : null;
+        const endDate = data.activationEndDate ? new Date(data.activationEndDate).toISOString() : null;
+
+        if (endDate && startDate && new Date(endDate) < new Date(startDate)) {
+          throw new Error('La fecha de término debe ser igual o mayor a la fecha de inicio.');
+        }
+
+        const now = new Date();
+        data.isActive = now >= new Date(startDate) && now <= new Date(endDate);
+      } else {
+        data.isActive = false; // Por defecto, si no hay fechas, no está activo
+      }
+
+      // Aseguramos que las fechas están en formato ISO
+      if (data.activationStartDate) {
+        data.activationStartDate = new Date(data.activationStartDate).toISOString();
+      }
+      if (data.activationEndDate) {
+        data.activationEndDate = new Date(data.activationEndDate).toISOString();
       }
 
       const docRef = await addDoc(collection(this.db, 'MoTPoint'), data);
@@ -238,6 +261,50 @@ export class AppService {
       if (data.address) {
         data.normalizedAddress = this.normalizeText(data.address);
       }
+
+      // Obtener el documento actual para validar fechas y recalcular isActive
+      const currentDoc = await getDoc(pointDocRef);
+      if (!currentDoc.exists()) {
+        throw new Error('El punto especificado no existe.');
+      }
+
+      const currentData = currentDoc.data();
+
+      // Normalizar fechas si se envían
+    if (data.activationStartDate) {
+      data.activationStartDate = new Date(data.activationStartDate).toISOString();
+    }
+    if (data.activationEndDate) {
+      data.activationEndDate = new Date(data.activationEndDate).toISOString();
+    }
+
+    // Validar que la fecha de término sea mayor o igual a la de inicio
+    if (data.activationStartDate && data.activationEndDate) {
+      const startDate = new Date(data.activationStartDate);
+      const endDate = new Date(data.activationEndDate);
+
+      if (endDate < startDate) {
+        throw new Error('La fecha de término debe ser igual o mayor a la fecha de inicio');
+      }
+    }
+
+    // Actualizar estado activo si se modifican las fechas
+    if (data.activationStartDate || data.activationEndDate) {
+      const now = new Date();
+      const startDate = data.activationStartDate ? new Date(data.activationStartDate) : null;
+      const endDate = data.activationEndDate ? new Date(data.activationEndDate) : null;
+
+      let isActive = false;
+      if (startDate && endDate) {
+        isActive = now >= startDate && now <= endDate;
+      } else if (startDate && now >= startDate) {
+        isActive = true;
+      } else if (endDate && now > endDate) {
+        isActive = false;
+      }
+
+      data.isActive = isActive;
+    }
 
       await updateDoc(pointDocRef, data);
       console.log(`Punto con ID ${id} actualizado con éxito.`);
