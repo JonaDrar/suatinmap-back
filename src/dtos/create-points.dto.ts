@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { ArrayMaxSize, IsArray, IsBoolean, IsInt, IsLatitude, IsLongitude, IsNumber, IsObject, IsOptional, IsString, IsUrl, Max, MaxLength, Min, MinLength, ValidateNested, IsISO8601, IsDateString, Validate} from "class-validator";
+import { ArrayMaxSize, ArrayMinSize, IsArray, IsBoolean, IsInt, IsLatitude, IsLongitude, IsNumber, IsObject, IsOptional, IsString, IsUrl, Max, MaxLength, Min, MinLength, ValidateNested, IsISO8601, IsDateString, Validate} from "class-validator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsDateAfterNow } from '../validators/is-date-after-now.validator';
 
@@ -107,6 +107,7 @@ export class CreatePoint {
     services : string[];
 
     @IsArray()
+    @ArrayMinSize(1)
     @ArrayMaxSize(5)
     @Type(() => Number)
     @IsInt({ each: true })
