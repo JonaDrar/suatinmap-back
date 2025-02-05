@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config'; // Asegúrate de importar ConfigService
 import { firebaseDatabase } from 'src/config/firestore.config'; // Asegúrate de que la configuración esté correcta
 import { collection, addDoc, getDocs, query, where, updateDoc, doc, getDoc } from 'firebase/firestore';
@@ -21,7 +21,6 @@ export class AppService {
       const querySnapshot = await getDocs(collection(this.db, 'User'));
       return querySnapshot.docs.map((doc) => {
         const data = doc.data();
-        delete data.pass;
         delete data.delete;
         return {
           id: doc.id,
@@ -33,11 +32,38 @@ export class AppService {
     }
   }
 
+  async getUserByUserId(userId: string): Promise<any> {
+    try {
+      const usersCollectionRef = collection(this.db, 'User');
+      const q = query(usersCollectionRef, where('userId', '==', userId));
+      const querySnapshot = await getDocs(q);
+  
+      if (querySnapshot.empty) {
+        console.warn(`Usuario no encontrado en Firestore con userId: ${userId}`);
+        throw new NotFoundException(`No se encontró el usuario con userId: ${userId}`);
+      }
+  
+      // Firestore puede devolver múltiples documentos, tomamos el primero
+      const userDoc = querySnapshot.docs[0];
+      const data = userDoc.data();
+  
+      delete data.pass;  // Elimina datos sensibles
+      delete data.delete;
+  
+      return { id: userDoc.id, ...data };
+    } catch (error) {
+      console.error(`Error al encontrar usuario: ${error.message}`);
+      throw new InternalServerErrorException('No se puede encontrar el usuario.');
+    }
+  }
+
+
   // Crear nuevos datos en Firestore
   async createUser(data: any): Promise<void> {
     try {
       const docRef = await addDoc(collection(this.db, 'User'), data);
       console.log('Usuario creado con el id', docRef.id); 
+      console.log(data);
     } catch (error) {
       console.error('Error creando usuario', error);
     }
