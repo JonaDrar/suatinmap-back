@@ -9,6 +9,7 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
+  ForbiddenException,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateUser } from './dtos/create-user.dto';
@@ -28,10 +29,13 @@ export class AppController {
     return this.appService.getUsers();
   }
 
-  @Get('/user/:id')
-  @ApiOperation({ summary: 'Obtiene un usuario por ID' })
-  getIdUser(@Param('id') id: string) {
-    return this.appService.getUserByUserId(id);
+  @Get('user/:uid')
+  async getUser(@Param('uid') uid: string) {
+    const user = await this.appService.getUserByUserId(uid);
+    if (user.roles !== 'admin') {
+      throw new ForbiddenException('No tienes permisos de administrador');
+    }
+    return user;
   }
 
   @Post('/user')
