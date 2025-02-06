@@ -1,16 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Query,
-  UseInterceptors,
-  UploadedFile,
-  ForbiddenException,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseInterceptors, UploadedFile, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateUser } from './dtos/create-user.dto';
 import { CreatePoint } from './dtos/create-points.dto';
@@ -18,6 +6,7 @@ import { PointQueryDto } from './dtos/point-query.dto';
 import { ApiOperation, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { UpdatePoint } from './dtos/update-points.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { validate } from 'class-validator';
 
 @Controller()
 export class AppController {
@@ -48,7 +37,24 @@ export class AppController {
   @Post('/points')
   @ApiOperation({ summary: 'Crear un punto' })
   @ApiBody({ type: CreatePoint })
+  @ApiOperation({ summary: 'Crear un punto' })
+  @ApiBody({ type: CreatePoint })
   async CreatePoint(@Body() data: CreatePoint): Promise<void> {
+    // Validación manual de los datos
+    const errors = await validate(data);
+
+    if (errors.length > 0) {
+      // Si hay errores, los formateamos y los devolvemos como un objeto
+      const formattedErrors = errors.reduce((acc, error) => {
+        acc[error.property] = Object.values(error.constraints || {}).join(', ');
+        return acc;
+      }, {});
+
+      // Lanzamos una excepción con los errores estructurados
+      throw new BadRequestException({ errors: formattedErrors });
+    }
+
+    // Si no hay errores, continúa con la lógica de creación
     await this.appService.createPoint(data);
   }
 
