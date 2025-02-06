@@ -17,8 +17,8 @@ export class CreateUser {
   roles: string;
 
   @IsString()
-  @ApiProperty({description:"Contraseña"})
-  pass: string;
+  @ApiProperty({description:"User ID"})
+  userId: string;
 
   @IsBoolean()
   @IsOptional()

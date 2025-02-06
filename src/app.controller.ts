@@ -1,9 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseInterceptors, UploadedFile, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateUser } from './dtos/create-user.dto';
 import { CreatePoint } from './dtos/create-points.dto';
 import { PointQueryDto } from './dtos/point-query.dto';
-import { ApiOperation, ApiBody,ApiQuery } from '@nestjs/swagger';
+import { ApiOperation, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { UpdatePoint } from './dtos/update-points.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { validate } from 'class-validator';
@@ -18,13 +18,25 @@ export class AppController {
     return this.appService.getUsers();
   }
 
+  @Get('user/:uid')
+  async getUser(@Param('uid') uid: string) {
+    const user = await this.appService.getUserByUserId(uid);
+    if (user.roles !== 'admin') {
+      throw new ForbiddenException('No tienes permisos de administrador');
+    }
+    return user;
+  }
+
   @Post('/user')
-  @ApiOperation({ summary: 'Crear un usuario' }) @ApiBody({ type: CreateUser }) 
+  @ApiOperation({ summary: 'Crear un usuario' })
+  @ApiBody({ type: CreateUser })
   async createUser(@Body() data: CreateUser): Promise<void> {
     await this.appService.createUser(data);
   }
 
   @Post('/points')
+  @ApiOperation({ summary: 'Crear un punto' })
+  @ApiBody({ type: CreatePoint })
   @ApiOperation({ summary: 'Crear un punto' })
   @ApiBody({ type: CreatePoint })
   async CreatePoint(@Body() data: CreatePoint): Promise<void> {
@@ -48,26 +60,111 @@ export class AppController {
 
   @Get('/points?')
   @ApiOperation({ summary: 'Obtener puntos filtrados' })
-  @ApiQuery({ name: 'name', required: false, type: String, description: 'Nombre (parcial o completo)' }) 
-  @ApiQuery({ name: 'description', required: false, type: String, description: 'Descripcion' })
-  @ApiQuery({ name: 'address', required: false, type: String, description: 'Dirección (parcial o completa)' })
-  @ApiQuery({ name: 'latitud', required: false, type: Number, description: 'Latitud' })
-  @ApiQuery({ name: 'longitude', required: false, type: Number, description: 'Longitud ' })
-  @ApiQuery({ name: 'region', required: false, type: String, description: 'Region' })
-  @ApiQuery({ name: 'commune', required: false, type: String, description: 'Comuna' })
-  @ApiQuery({ name: 'services', required: false, type: String, description: 'Servicios(Separar servicios con coma)' })
-  @ApiQuery({ name: 'type', required: false, type: String, description: 'Numero de tipo(1-Peluqueria,2-Peluqueria canina,3-Centro de acopio,4-Centro de estudio)' })
-  @ApiQuery({ name: 'highlighted', required: false, type: Boolean, description: 'Destacado' })
-  @ApiQuery({ name: 'galleryName', required: false, type: String, description: 'Nombre de la Galeria' })
-  @ApiQuery({ name: 'localNumber', required: false, type: String, description: 'Numero del local en la galeria' })
-  @ApiQuery({ name: 'phone', required: false, type: String, description: 'Número de teléfono' }) 
-  @ApiQuery({ name: 'facebook', required: false, type: String, description: 'URL de Facebook' }) 
-  @ApiQuery({ name: 'instagram', required: false, type: String, description: 'URL de Instagram' }) 
-  @ApiQuery({ name: 'twitter', required: false, type: String, description: 'URL de Twitter' }) 
-  @ApiQuery({ name: 'other', required: false, type: String, description: 'URL de otra red social' })
-
+  @ApiQuery({
+    name: 'name',
+    required: false,
+    type: String,
+    description: 'Nombre (parcial o completo)',
+  })
+  @ApiQuery({
+    name: 'description',
+    required: false,
+    type: String,
+    description: 'Descripcion',
+  })
+  @ApiQuery({
+    name: 'address',
+    required: false,
+    type: String,
+    description: 'Dirección (parcial o completa)',
+  })
+  @ApiQuery({
+    name: 'latitud',
+    required: false,
+    type: Number,
+    description: 'Latitud',
+  })
+  @ApiQuery({
+    name: 'longitude',
+    required: false,
+    type: Number,
+    description: 'Longitud ',
+  })
+  @ApiQuery({
+    name: 'region',
+    required: false,
+    type: String,
+    description: 'Region',
+  })
+  @ApiQuery({
+    name: 'commune',
+    required: false,
+    type: String,
+    description: 'Comuna',
+  })
+  @ApiQuery({
+    name: 'services',
+    required: false,
+    type: String,
+    description: 'Servicios(Separar servicios con coma)',
+  })
+  @ApiQuery({
+    name: 'type',
+    required: false,
+    type: String,
+    description:
+      'Numero de tipo(1-Peluqueria,2-Peluqueria canina,3-Centro de acopio,4-Centro de estudio)',
+  })
+  @ApiQuery({
+    name: 'highlighted',
+    required: false,
+    type: Boolean,
+    description: 'Destacado',
+  })
+  @ApiQuery({
+    name: 'galleryName',
+    required: false,
+    type: String,
+    description: 'Nombre de la Galeria',
+  })
+  @ApiQuery({
+    name: 'localNumber',
+    required: false,
+    type: String,
+    description: 'Numero del local en la galeria',
+  })
+  @ApiQuery({
+    name: 'phone',
+    required: false,
+    type: String,
+    description: 'Número de teléfono',
+  })
+  @ApiQuery({
+    name: 'facebook',
+    required: false,
+    type: String,
+    description: 'URL de Facebook',
+  })
+  @ApiQuery({
+    name: 'instagram',
+    required: false,
+    type: String,
+    description: 'URL de Instagram',
+  })
+  @ApiQuery({
+    name: 'twitter',
+    required: false,
+    type: String,
+    description: 'URL de Twitter',
+  })
+  @ApiQuery({
+    name: 'other',
+    required: false,
+    type: String,
+    description: 'URL de otra red social',
+  })
   async getFilteredPoints(@Query() filters: PointQueryDto) {
-    console.log(filters)
+    console.log(filters);
     return this.appService.getFilteredPoints(filters);
   }
 
@@ -78,8 +175,12 @@ export class AppController {
   }
 
   @Put('/points/:id')
-  @ApiOperation({ summary: 'Actualiza un punto' })@ApiBody({ type: UpdatePoint }) 
-  async updatePoint(@Param('id') id: string, @Body() data: UpdatePoint): Promise<void> {
+  @ApiOperation({ summary: 'Actualiza un punto' })
+  @ApiBody({ type: UpdatePoint })
+  async updatePoint(
+    @Param('id') id: string,
+    @Body() data: UpdatePoint,
+  ): Promise<void> {
     await this.appService.updatePoint(id, data);
   }
 
@@ -96,5 +197,4 @@ export class AppController {
     const imageUrl = await this.appService.uploadImageToCloudinary(file);
     return { url: imageUrl };
   }
-
 }
