@@ -21,9 +21,9 @@ export class AppController {
   @Get('user/:uid')
   async getUser(@Param('uid') uid: string) {
     const user = await this.appService.getUserByUserId(uid);
-    if (user.roles !== 'admin') {
-      throw new ForbiddenException('No tienes permisos de administrador');
-    }
+    // if (user.roles !== 'admin') {
+    //   throw new ForbiddenException('No tienes permisos de administrador');
+    // }
     return user;
   }
 
